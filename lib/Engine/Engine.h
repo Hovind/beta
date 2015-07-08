@@ -1,0 +1,3 @@
+namespace Engine {
+	void init();
+}
