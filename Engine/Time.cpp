@@ -29,8 +29,7 @@ namespace Engine {
 			SDL_Delay(_frameCap - frameTicks);
 			_time += _frameCap;
 			return TICKS_PER_SEC * _frameCap;
-		}
-		else {
+		} else {
 			_time += frameTicks;
 			return TICKS_PER_SEC * frameTicks;
 		}

@@ -15,11 +15,6 @@ Map::~Map() {
 
 }
 
-
-
-
-
-
 unsigned int Map::getIndex(glm::vec2 worldPosition) {
 	return _grid.getIndex(getPosition(worldPosition));
 }
@@ -110,17 +105,6 @@ void Map::update(float dt) {
 				break;
 
 		}
-		/*if (unit->getMoving() && getBlocked(unit->getCurrentDestination())
-			updatePath(unit);*/
-
-		/*glm::uvec2
-			oldPosition = getPosition(unit->getPosition()),
-			newPosition = getPosition(unit->update(dt));*/
-
-		/*if (oldPosition != newPosition) {
-			_grid.setBlocked(newPosition, true);
-			_grid.setBlocked(oldPosition, false);
-		}*/
 	}
 }
 

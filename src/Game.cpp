@@ -114,21 +114,6 @@ void Game::processInput() {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
 	}
 
-
-	/*
-	if (_inputManager.isKeyPressed(SDLK_w)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
-	}
-	if (_inputManager.isKeyPressed(SDLK_s)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, CAMERA_SPEED));
-	}
-	if (_inputManager.isKeyPressed(SDLK_a)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0f));
-	}
-	if (_inputManager.isKeyPressed(SDLK_d)) {
-		_camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0f));
-	}
-	*/
 	
 	
 	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) {
