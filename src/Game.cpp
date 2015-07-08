@@ -57,7 +57,7 @@ void Game::gameLoop() {
 		_map.update(dt);
 		_camera.update();
 		draw();
-		
+
 		dt = _time.end();
 	}
 }
@@ -114,8 +114,8 @@ void Game::processInput() {
 		_camera.setPosition(_camera.getPosition() + glm::vec2(0.0f, -CAMERA_SPEED));
 	}
 
-	
-	
+
+
 	if (_inputManager.isKeyPressed(SDLK_ESCAPE)) {
 		_interface.clearTargets();
 	}
@@ -141,7 +141,7 @@ void Game::draw() {
 	_colorProgram.use();
 
 	glActiveTexture(GL_TEXTURE0);
-	
+
 	GLuint textureLocation = _colorProgram.getUniformLocation("tex");
 	glUniform1i(textureLocation, TEXTURE_UNIT);
 
@@ -152,11 +152,8 @@ void Game::draw() {
 
 	_spriteBatch.begin();
 
-
-
 	_map.draw(_spriteBatch);
 	_interface.draw(_spriteBatch);
-
 
 	_spriteBatch.end();
 	_spriteBatch.renderBatch();
