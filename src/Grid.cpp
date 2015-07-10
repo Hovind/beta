@@ -1,5 +1,3 @@
-#include <set>
-
 #include "Grid.h"
 #include "OpenSet.h"
 #include "ClosedSet.h"
@@ -8,11 +6,8 @@
 
 Grid::Grid()
 : m_mapSize(glm::uvec2(200, 200))
-, m_blocked(new bool[m_mapSize.x * m_mapSize.y]) {}
-
-Grid::~Grid() {
-
-}
+, m_blocked(new bool[m_mapSize.x * m_mapSize.y])
+, m_textures(new Engine::GLTexture[m_mapSize.x * m_mapSize.y]) {}
 
 std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 	ClosedSet closedSet;

@@ -50,7 +50,7 @@ void Interface::drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch) const {
 
 void Interface::setTargetsDestination(Map &map, glm::vec2 destination) const {
 	if (!map.getBlocked(destination))
-		for (auto it = _targets.begin(); it != _targets.end(); ++it)
-			map.setPath(*it, destination);
+		for (auto &it : _targets)
+			map.setPath(it, destination);
 
 }
