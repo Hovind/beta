@@ -16,18 +16,18 @@ public:
 	Interface();
 	~Interface();
 
-	void draw(Engine::SpriteBatch &spriteBatch);
+	void draw(Engine::SpriteBatch &spriteBatch) const;
 
-	bool getBoxActive();
-	void updateBox(glm::vec2 mouseCoords);
+	bool getBoxActive() const { return _box.getActive(); }
+	void updateBox(glm::vec2 worldPosition);
 
 	void clearTargets();
 	void addTarget(Unit *unit);
 	void updateTargets(Map &map, bool append);
 
-	void drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch);
+	void drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch) const;
 
-	void setTargetsDestination(Map &map, glm::vec2 destination);
+	void setTargetsDestination(Map &map, glm::vec2 destination) const;
 private:
 	Box _box;
 	std::set<Unit*> _targets;

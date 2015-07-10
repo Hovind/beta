@@ -1,5 +1,5 @@
 #include "GLSLProgram.h"
-#include "MyException.h"
+#include "Exception.h"
 
 #include <fstream>
 
@@ -19,11 +19,11 @@ namespace Engine{
 
 		_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		if (!_vertexShaderID)
-			throw MyException("Vertex shader failed to be created!");
+			throw Exception("Vertex shader failed to be created!");
 
 		_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
 		if (_fragmentShaderID == 0)
-			throw MyException("Fragment shader failed to be created!");
+			throw Exception("Fragment shader failed to be created!");
 		compileShader(vertexShaderFilePath, _vertexShaderID);
 		compileShader(fragmentShaderFilepath, _fragmentShaderID);
 	}
@@ -37,7 +37,7 @@ namespace Engine{
 		GLint success = 0;
 		glGetProgramiv(_programID, GL_LINK_STATUS, (int *)&success);
 		if (success == GL_FALSE)
-			throw MyException("Shaders failed to link!");
+			throw Exception("Shaders failed to link!");
 
 		glDetachShader(_programID, _vertexShaderID);
 		glDetachShader(_programID, _fragmentShaderID);
@@ -54,7 +54,7 @@ namespace Engine{
 	GLuint GLSLProgram::getUniformLocation(const std::string &uniformName){
 		GLuint location = glGetUniformLocation(_programID, uniformName.c_str());
 		if (location == GL_INVALID_INDEX)
-			throw MyException("Uniform " + uniformName + " not found in shader!");
+			throw Exception("Uniform " + uniformName + " not found in shader!");
 		else
 			return location;
 	}
@@ -77,7 +77,7 @@ namespace Engine{
 	void GLSLProgram::compileShader(const std::string& filePath, GLuint id) {
 		std::ifstream shaderFile(filePath);
 		if (!shaderFile)
-			throw MyException("Failed to open " + filePath);
+			throw Exception("Failed to open " + filePath);
 
 		std::string fileContents,
 					line;
@@ -97,6 +97,6 @@ namespace Engine{
 		glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 
 		if (success == GL_FALSE)
-			throw MyException("Shader " + filePath + " failed to compile");
+			throw Exception("Shader " + filePath + " failed to compile");
 	}
 }

@@ -11,35 +11,6 @@ Map::Map(/*std::string mapFilePath*/)
 
 }
 
-Map::~Map() {
-
-}
-
-unsigned int Map::getIndex(glm::vec2 worldPosition) {
-	return _grid.getIndex(getPosition(worldPosition));
-}
-
-glm::uvec2 Map::getPosition(glm::vec2 worldPosition) {
-	glm::uvec2 mapSize = _grid.getMapSize();
-	return glm::uvec2((worldPosition.x + 0.5f * _tileSize * mapSize.x) / _tileSize, (worldPosition.y + 0.5f * _tileSize * mapSize.y) / _tileSize);
-}
-glm::uvec2 Map::getPosition(Unit *unit) {
-	return getPosition(unit->getPosition());
-}
-
-glm::vec2 Map::getWorldPosition(glm::uvec2 position) {
-	return glm::vec2(position) * _tileSize - 0.5f * glm::vec2(_grid.getMapSize()) * _tileSize + 0.5f * glm::vec2(_tileSize);
-}
-glm::vec2 Map::getWorldPosition(unsigned int index) {
-	return getWorldPosition(_grid.getPosition(index));
-}
-
-bool Map::getBlocked(glm::vec2 worldPosition) {
-	return _grid.getBlocked(getPosition(worldPosition));
-}
-void Map::setBlocked(glm::vec2 worldPosition, bool blocked) {
-	_grid.setBlocked(getPosition(worldPosition), blocked);
-}
 
 void Map::init() {
 	glm::uvec2 mapSize = _grid.getMapSize();
@@ -77,7 +48,8 @@ void Map::update(float dt) {
 						position = getPosition(worldPosition),
 						newPosition;
 					float speed = unit->getSpeed();
-
+					if (getBlocked(finalWorldDestination))
+						setPath(unit, getWorldPosition(_grid.findNearestUnblockedPosition(finalDestination)));
 					if (getBlocked(currentWorldDestination))
 						updatePath(unit);
 

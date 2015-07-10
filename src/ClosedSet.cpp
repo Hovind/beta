@@ -1,7 +1,7 @@
 #include "ClosedSet.h"
 
 ClosedSet::ClosedSet() {
-	
+
 }
 
 ClosedSet::~ClosedSet() {
@@ -13,7 +13,7 @@ void ClosedSet::insert(Node *node) {
 	_vector.push_back(node);
 }
 
-bool ClosedSet::contains(glm::uvec2 position) {
+bool ClosedSet::contains(glm::uvec2 position) const {
 	for (auto it = _vector.begin(); it != _vector.end(); ++it) {
 		if ((*it)->getPosition() == position) {
 			return true;

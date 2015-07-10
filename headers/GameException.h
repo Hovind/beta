@@ -8,5 +8,5 @@ public:
 	~GameException() throw();
 	const char* what () const throw();
 private:
-	std::string str;
+	std::string m_str;
 };

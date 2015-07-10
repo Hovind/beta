@@ -1,12 +1,12 @@
 #include <fstream>
 #include "IOManager.h"
-#include "MyException.h"
+#include "Exception.h"
 
 namespace Engine {
 	bool IOManager::readFileToBuffer(std::string &filePath, std::vector<unsigned char> &buffer) {
 		std::ifstream file(filePath, std::ios::binary);
 		if (!file)
-			throw MyException(filePath + " could not be opened!");
+			throw Exception(filePath + " could not be opened!");
 
 		file.seekg(0, std::ios::end);
 		int fileSize = file.tellg();

@@ -10,7 +10,7 @@ public:
 	~ClosedSet();
 
 	void insert(Node *node);
-	bool contains(glm::uvec2 position);
+	bool contains(glm::uvec2 position) const;
 
 
 private:

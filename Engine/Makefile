@@ -4,7 +4,7 @@ AR = ar rcs
 
 CFLAGS = -Wall -std=c++11
 
-LIBSRC = Window.cpp SpriteBatch.cpp Camera2D.cpp Engine.cpp Sprite.cpp GLSLProgram.cpp InputManager.cpp MyException.cpp IOManager.cpp ImageLoader.cpp ResourceManager.cpp TextureCache.cpp Time.cpp picoPNG.cpp
+LIBSRC = Window.cpp SpriteBatch.cpp Camera2D.cpp Engine.cpp Sprite.cpp GLSLProgram.cpp InputManager.cpp Exception.cpp IOManager.cpp ImageLoader.cpp ResourceManager.cpp TextureCache.cpp Time.cpp picoPNG.cpp
 HEADSRC = Vertex.h GLTexture.h
 
 LIB = ../lib/libEngine.a
@@ -18,7 +18,7 @@ HEAD = $(LIBSRC:.cpp=.h)
 
 $(LIB): $(OBJ)
 	$(AR) $@ $^
-	rm -f $(OBJ)
+	#rm -f $(OBJ)
 	cp -t $(HEADPATH) $(HEAD) $(HEADSRC)
 
 %.o : %.cpp

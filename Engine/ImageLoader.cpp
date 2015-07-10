@@ -1,7 +1,7 @@
 #include "ImageLoader.h"
 #include "picoPNG.h"
 #include "IOManager.h"
-#include "MyException.h"
+#include "Exception.h"
 
 namespace Engine {
 	GLTexture ImageLoader::loadPNG(std::string filePath) {
@@ -9,7 +9,7 @@ namespace Engine {
 
 		std::vector<unsigned char> in;
 		if (!IOManager::readFileToBuffer(filePath, in))
-			throw MyException("Failed to read to buffer!");
+			throw Exception("Failed to read to buffer!");
 
 		std::vector<unsigned char> out;
 		unsigned long
@@ -17,7 +17,7 @@ namespace Engine {
 			height;
 		int error = decodePNG(out, width, height, &(in[0]), in.size());
 		if (error)
-			throw MyException("Failed to decode PNG!");
+			throw Exception("Failed to decode PNG!");
 
 		texture.width = width;
 		texture.height = height;
@@ -26,7 +26,7 @@ namespace Engine {
 
 		glBindTexture(GL_TEXTURE_2D, texture.id);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &(out[0]));
-		
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

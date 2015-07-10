@@ -3,53 +3,18 @@
 #include "Grid.h"
 #include "OpenSet.h"
 #include "ClosedSet.h"
+#include "GameException.h"
 
 
 Grid::Grid()
-: _mapSize(glm::uvec2(200, 200))
-, _blocked(new bool[_mapSize.x * _mapSize.y]) {}
+: m_mapSize(glm::uvec2(200, 200))
+, m_blocked(new bool[m_mapSize.x * m_mapSize.y]) {}
 
 Grid::~Grid() {
 
 }
 
-
-glm::uvec2 Grid::getMapSize() {
-	return _mapSize;
-}
-
-unsigned int Grid::getIndex(unsigned int x, unsigned int y) {
-	return x * _mapSize.x + y;
-}
-
-unsigned int Grid::getIndex(glm::uvec2 position) {
-	return getIndex(position.x, position.y);
-}
-
-glm::uvec2 Grid::getPosition(unsigned int index) {
-	return glm::uvec2(index % _mapSize.x, index / _mapSize.x);
-}
-
-bool Grid::getValidIndex(glm::uvec2 position) {
-	return position.x < _mapSize.x && position.y < _mapSize.y;
-}
-
-unsigned int Grid::getHVal(glm::uvec2 start, glm::uvec2 end) {
-	return 10*(abs(end.x - start.x) + abs(end.y - start.y));
-}
-
-
-bool Grid::getBlocked(glm::uvec2 position) {
-	return _blocked[getIndex(position)];
-}
-
-
-void Grid::setBlocked(glm::uvec2 position, bool blocked) {
-	_blocked[getIndex(position)] = blocked;
-}
-
-
-std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) {
+std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 	ClosedSet closedSet;
 	OpenSet openSet;
 
@@ -80,18 +45,32 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) {
 					unsigned int gValTentative = current->getGVal() + (direction.x * direction.y) ? 14: 10;
 					if (!openSet.contains(position)) {
 						openSet.insert(new Node(position, getHVal(position, end), gValTentative, current));
-					}
-					else {
+					} else {
 						Node *neighbour = openSet.get(position);
-						if (gValTentative < neighbour->getGVal()) {
-
-							openSet.remove(neighbour);
-							openSet.insert(new Node(position, getHVal(position, end), gValTentative, current));
-						}
+						if (gValTentative < neighbour->getGVal())
+							neighbour->set(getHVal(position, end), gValTentative, current);
 					}
 				}
 			}
  		}
 	}
-	return std::vector<glm::uvec2>();
+	throw GameException("You can not go there!");
+}
+
+
+glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 position) const {
+	/*std::vector<glm::uvec> checked;
+	for (int x = -1; x <= 1; ++x){
+		for (int y = -1; y <= 1; ++y) {
+			glm::uvec2 direction(x, y);
+			glm::uvec2 destination = position + direction;
+			checked.push_back(destination);
+			if (!getBlocked(destination))
+				return destination;
+			else if (_grid.getValidIndex(destination) && [=](){for (auto &it : checked) if (it == destination) return false; return false; })
+				return findNearestUnblockedPosition(destination);
+		}
+	}
+	*/
+	return position;
 }

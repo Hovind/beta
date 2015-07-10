@@ -8,21 +8,18 @@ Interface::~Interface() {
 
 }
 
-void Interface::draw(Engine::SpriteBatch &spriteBatch) {
+void Interface::draw(Engine::SpriteBatch &spriteBatch) const {
 	drawTargetsUnitCircles(spriteBatch);
 	if (_box.getActive())
 		_box.draw(spriteBatch);
 }
 
-bool Interface::getBoxActive() {
-	return _box.getActive();
-}
 
-void Interface::updateBox(glm::vec2 mouseCoords) {
+void Interface::updateBox(glm::vec2 worldPosition) {
 	if (_box.getActive())
-		_box.update(mouseCoords);
+		_box.update(worldPosition);
 	else
-		_box.begin(mouseCoords);
+		_box.begin(worldPosition);
 }
 
 void Interface::clearTargets() {
@@ -46,12 +43,12 @@ void Interface::updateTargets(Map &map, bool append) {
 	_box.end();
 }
 
-void Interface::drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch) {
+void Interface::drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch) const {
 	for (auto it = _targets.begin(); it != _targets.end(); ++it)
 		(*it)->drawUnitCircle(spriteBatch);
 }
 
-void Interface::setTargetsDestination(Map &map, glm::vec2 destination) {
+void Interface::setTargetsDestination(Map &map, glm::vec2 destination) const {
 	if (!map.getBlocked(destination))
 		for (auto it = _targets.begin(); it != _targets.end(); ++it)
 			map.setPath(*it, destination);

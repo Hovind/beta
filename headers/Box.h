@@ -12,17 +12,17 @@ public:
 	Box();
 	~Box();
 
-	void begin(glm::vec2 pos);
+	void begin(glm::vec2 worldPosition);
 	void end();
-	void update(glm::vec2 pos);
+	void update(glm::vec2 worldPosition);
 
-	bool getActive();
+	bool getActive() const { return m_active; }
 	glm::vec4 getRect();
 
-	void draw(Engine::SpriteBatch& spriteBatch);
+	void draw(Engine::SpriteBatch &spriteBatch) const;
 
 	private:
-		bool _active;
-		glm::vec4 _rect;
+		bool m_active;
+		glm::vec4 m_rect;
 
 };
