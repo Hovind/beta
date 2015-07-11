@@ -1,7 +1,6 @@
 #include "IOManager.h"
 #include "Map.h"
 #include "Troll.h"
-#include <iostream>
 
 Map::Map(/*std::string mapFilePath*/)
 : m_tileSize(32.0f)

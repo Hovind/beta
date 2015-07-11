@@ -27,8 +27,8 @@ void Interface::updateTargets(Map &map, bool append) {
 	std::set<Unit*> units = map.getUnitsWithin(rect);
 
 	if (append)
-		for (auto it = units.begin(); it != units.end(); ++it)
-			m_targets.insert(*it);
+		for (auto &it : units)
+			m_targets.insert(it);
 	else
 		m_targets = units;
 

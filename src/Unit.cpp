@@ -1,6 +1,6 @@
 #include "Unit.h"
 #include "ResourceManager.h"
-#include <iostream>
+
 Unit::Unit(float x, float y, float width, float height, float speed, std::string texturePath)
 : m_size(glm::vec2(width, height))
 , m_position(glm::vec2(x, y))
@@ -20,7 +20,6 @@ glm::vec2 Unit::moveCurrent(float dt) {
 }
 glm::vec2 Unit::moveFinal(float dt) {
 	glm::vec2 finalDifference = m_finalDestination - m_position;
-	std::cout << glm::length(finalDifference) << std::endl;
 	m_velocity = glm::normalize(finalDifference) * m_speed;
 	m_position += m_velocity * dt;
 	return m_position;
