@@ -21,12 +21,17 @@ void Map::init() {
 	for (unsigned int i = 1; i < mapSize.x; ++i) {
 		m_grid.setTexture(mapSize.x * mapSize.y - i, "textures/tiles/stone.png");
 	}
-	m_grid.setTexture(0, "textures/tiles/redgrass.png");
-	glm::vec2 asd = getWorldPosition(getPosition(glm::vec2(0.0f, 0.0f)));
-	spawn(new Troll(asd.x, asd.y));/*
+	for (unsigned int i = 0; i < mapSize.x; ++i) {
+		m_grid.setTexture(i * mapSize.x, "textures/tiles/redgrass.png");
+	}
+	for (unsigned int i = 1; i < mapSize.x; ++i) {
+		m_grid.setTexture(i * mapSize.x - 1, "textures/tiles/redgrass.png");
+	}
+
+	spawn(new Troll(0.0f, 0.0f));
 	spawn(new Troll(120.0f, 0.0f));
 	spawn(new Troll(120.0f, 120.0f));
-	spawn(new Troll(0.0f, 120.0f));*/
+	spawn(new Troll(0.0f, 120.0f));
 
 }
 
@@ -99,12 +104,11 @@ void Map::draw(Engine::SpriteBatch &spriteBatch) {
 }
 
 glm::vec4 Map::getBounds() {
-	return glm::vec4(getWorldPosition(glm::uvec2(0, 0)), getWorldPosition(m_grid.getMapSize()));
+	return glm::vec4(getWorldPosition(glm::uvec2(0, 0)) - 0.5f * glm::vec2(m_tileSize), getWorldPosition(m_grid.getMapSize()) - 0.5f * glm::vec2(m_tileSize));
 }
 std::set<Unit*> Map::getUnitsWithin(glm::vec4 rect) {
 	std::set<Unit*> units;
-	for (auto it = m_units.begin(); it != m_units.end(); ++it) {
-		Unit* unit = *it;
+	for (auto &unit : m_units) {
 		glm::vec2 size =  0.5f * unit->getSize();
 		glm::vec2 position = unit->getPosition() + size;
 

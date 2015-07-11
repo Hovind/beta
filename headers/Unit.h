@@ -43,7 +43,6 @@ private:
 		m_velocity,
 		m_currentDestination,
 		m_finalDestination;
-
 	float m_speed;
 	UnitState m_state;
 	std::vector<glm::uvec2> m_path;

@@ -1,3 +1,5 @@
+#pragma once
+
 enum class Race {HUMAN, NIGHTELF, ORC, UNDEAD};
 
 class Player {

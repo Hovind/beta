@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Grid.h"
 #include "OpenSet.h"
 #include "ClosedSet.h"
@@ -5,7 +6,7 @@
 
 
 Grid::Grid()
-: m_mapSize(glm::uvec2(200, 200))
+: m_mapSize(glm::uvec2(50, 50))
 , m_blocked(new bool[m_mapSize.x * m_mapSize.y])
 , m_textures(new Engine::GLTexture[m_mapSize.x * m_mapSize.y]) {}
 
@@ -32,7 +33,7 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 		closedSet.insert(current);
 		openSet.remove(current);
 
-		for (int x = -1; x <= 1; ++x){
+		for (int x = -1; x <= 1; ++x) {
 			for (int y = -1; y <= 1; ++y) {
 				glm::uvec2 direction(x, y);
 				glm::uvec2 position = currentPosition + direction;
@@ -53,19 +54,25 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 }
 
 
-glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 position) const {
-	/*std::vector<glm::uvec> checked;
-	for (int x = -1; x <= 1; ++x){
-		for (int y = -1; y <= 1; ++y) {
-			glm::uvec2 direction(x, y);
-			glm::uvec2 destination = position + direction;
-			checked.push_back(destination);
-			if (!getBlocked(destination))
-				return destination;
-			else if (_grid.getValidIndex(destination) && [=](){for (auto &it : checked) if (it == destination) return false; return false; })
-				return findNearestUnblockedPosition(destination);
+glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 currentPosition) const {
+	for (int radius = 1; radius < static_cast<int>(m_mapSize.x) || radius < static_cast<int>(m_mapSize.y); ++radius) {
+		for (int i = 0; i <=radius; ++i) {
+			glm::uvec2 position = currentPosition + glm::uvec2(-radius, i);
+			if (getValidIndex(position) && !getBlocked(position))
+				return position;
+
+			position = currentPosition + glm::uvec2(i, radius);
+			if (getValidIndex(position) && !getBlocked(position))
+				return position;
+
+			position = currentPosition + glm::uvec2(radius, -i);
+			if (getValidIndex(position) && !getBlocked(position))
+				return position;
+
+			position = currentPosition + glm::uvec2(-i, -radius);
+			if (getValidIndex(position) && !getBlocked(position))
+				return position;
 		}
 	}
-	*/
-	return position;
+	throw GameException("You can not move!");
 }
