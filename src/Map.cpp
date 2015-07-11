@@ -130,5 +130,6 @@ void Map::updatePath(Unit *unit) {
 }
 void Map::setPath(Unit *unit, glm::vec2 finalDestination) {
 	unit->setFinalDestination(finalDestination);
-	updatePath(unit);
+	if (!getBlocked(finalDestination))
+		updatePath(unit);
 }

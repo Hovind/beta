@@ -13,12 +13,12 @@
 
 class Interface {
 public:
-	Interface();
-	~Interface();
+	Interface() {}
+	~Interface() {}
 
 	void draw(Engine::SpriteBatch &spriteBatch) const;
 
-	bool getBoxActive() const { return _box.getActive(); }
+	bool getBoxActive() const { return m_box.getActive(); }
 	void updateBox(glm::vec2 worldPosition);
 
 	void clearTargets();
@@ -29,6 +29,6 @@ public:
 
 	void setTargetsDestination(Map &map, glm::vec2 destination) const;
 private:
-	Box _box;
-	std::set<Unit*> _targets;
+	Box m_box;
+	std::set<Unit*> m_targets;
 };

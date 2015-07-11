@@ -1,56 +1,47 @@
 #include "Interface.h"
 
-Interface::Interface() {
-
-}
-
-Interface::~Interface() {
-
-}
-
 void Interface::draw(Engine::SpriteBatch &spriteBatch) const {
 	drawTargetsUnitCircles(spriteBatch);
-	if (_box.getActive())
-		_box.draw(spriteBatch);
+	if (m_box.getActive())
+		m_box.draw(spriteBatch);
 }
 
 
 void Interface::updateBox(glm::vec2 worldPosition) {
-	if (_box.getActive())
-		_box.update(worldPosition);
+	if (m_box.getActive())
+		m_box.update(worldPosition);
 	else
-		_box.begin(worldPosition);
+		m_box.begin(worldPosition);
 }
 
 void Interface::clearTargets() {
-	_targets.clear();
+	m_targets.clear();
 }
 
 void Interface::addTarget(Unit *unit) {
-	_targets.insert(unit);
+	m_targets.insert(unit);
 }
 
 void Interface::updateTargets(Map &map, bool append) {
-	glm::vec4 rect = _box.getRect();
+	glm::vec4 rect = m_box.getRect();
 	std::set<Unit*> units = map.getUnitsWithin(rect);
 
 	if (append)
 		for (auto it = units.begin(); it != units.end(); ++it)
-			_targets.insert(*it);
+			m_targets.insert(*it);
 	else
-		_targets = units;
+		m_targets = units;
 
-	_box.end();
+	m_box.end();
 }
 
 void Interface::drawTargetsUnitCircles(Engine::SpriteBatch &spriteBatch) const {
-	for (auto it = _targets.begin(); it != _targets.end(); ++it)
-		(*it)->drawUnitCircle(spriteBatch);
+	for (auto &it : m_targets)
+		it->drawUnitCircle(spriteBatch);
 }
 
 void Interface::setTargetsDestination(Map &map, glm::vec2 destination) const {
-	if (!map.getBlocked(destination))
-		for (auto &it : _targets)
-			map.setPath(it, destination);
+	for (auto &it : m_targets)
+		map.setPath(it, destination);
 
 }
