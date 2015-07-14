@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "Game.h"
-#include "MyException.h"
+#include "Exception.h"
 #include "Engine.h"
 #include "ResourceManager.h"
 
