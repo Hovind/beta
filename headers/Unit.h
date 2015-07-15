@@ -5,13 +5,13 @@
 #include <string>
 #include <glm/glm.hpp>
 #include "SpriteBatch.h"
-#include "GLTexture.h"
+#include "SpriteSheet.h"
 
 enum class UnitState {STOP, MOVE, ATTACK};
 
 class Unit {
 public:
-	Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string texturePath);
+	Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string spriteSheetPath, glm::uvec2 spriteSheetDimensions);
 	~Unit() {}
 
 	glm::vec2 moveCurrent(float dt);
@@ -52,7 +52,6 @@ private:
 	UnitState m_state;
 	std::vector<glm::uvec2> m_path;
 
-	Engine::GLTexture
-		m_circleTexture,
-		m_texture;
+	Engine::GLTexture m_circleTexture;
+	Engine::SpriteSheet m_spriteSheet;
 };

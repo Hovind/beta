@@ -5,7 +5,7 @@ AR = ar rcs
 CFLAGS = -Wall -std=c++11
 
 LIBSRC = Window.cpp SpriteBatch.cpp Camera2D.cpp Engine.cpp Sprite.cpp GLSLProgram.cpp InputManager.cpp Exception.cpp IOManager.cpp ImageLoader.cpp ResourceManager.cpp TextureCache.cpp Time.cpp picoPNG.cpp
-HEADSRC = Vertex.h GLTexture.h
+HEADSRC = Vertex.h GLTexture.h SpriteSheet.h
 
 LIB = ../lib/libEngine.a
 HEADPATH = ../lib/Engine/

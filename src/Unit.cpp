@@ -1,7 +1,7 @@
 #include "Unit.h"
 #include "ResourceManager.h"
 
-Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string texturePath)
+Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string spriteSheetPath, glm::uvec2 spriteSheetDimensions)
 : m_drawSize(glm::vec2(width, height))
 , m_position(glm::vec2(x, y))
 , m_currentDestination(m_position)
@@ -11,7 +11,7 @@ Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, f
 , m_speed(speed)
 , m_state(UnitState::STOP) {
 	m_circleTexture = Engine::ResourceManager::getTexture("textures/misc/circle.png");
-	m_texture = Engine::ResourceManager::getTexture(texturePath);
+	m_spriteSheet.init(spriteSheetPath, spriteSheetDimensions);
 }
 
 glm::vec2 Unit::moveCurrent(float dt) {
@@ -32,11 +32,41 @@ glm::uvec2 Unit::popPath() {
 }
 
 void Unit::draw(Engine::SpriteBatch& spriteBatch) {
-	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	Engine::Color color;
 	glm::vec4 posAndSize = getDrawPositionAndSize();
+	unsigned int index = 54;
+	switch (m_state) {
+		case UnitState::STOP:
+		{
+			if (m_velocity.x > 0) {
 
-	spriteBatch.draw(posAndSize, uv, m_texture.id, 0.0f, color);
+			} else if (m_velocity.x < 0) {
+
+			} else {
+
+			}
+		}
+		break;
+		case UnitState::MOVE:
+		{
+			if (m_velocity.x > 0) {
+				if (m_velocity.y > 0) {
+					index =
+				} else {
+					index =
+				}
+			} else  {
+				if (m_velocity.y > 0) {
+					index =
+				} else {
+					index =
+				}
+			}
+		}
+		break;
+
+	}
+	spriteBatch.draw(posAndSize, m_spriteSheet.getUVs(index), m_spriteSheet.getTexture().id, 0.0f, color);
 }
 void Unit::drawUnitCircle(Engine::SpriteBatch& spriteBatch) {
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
