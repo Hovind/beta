@@ -1,11 +1,13 @@
 #include "Unit.h"
 #include "ResourceManager.h"
 
-Unit::Unit(float x, float y, float width, float height, float speed, std::string texturePath)
-: m_size(glm::vec2(width, height))
+Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string texturePath)
+: m_drawSize(glm::vec2(width, height))
 , m_position(glm::vec2(x, y))
 , m_currentDestination(m_position)
 , m_finalDestination(m_position)
+, m_needsPathUpdate(false)
+, m_gridSize(gridSize)
 , m_speed(speed)
 , m_state(UnitState::STOP) {
 	m_circleTexture = Engine::ResourceManager::getTexture("textures/misc/circle.png");

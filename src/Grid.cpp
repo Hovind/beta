@@ -7,10 +7,32 @@
 
 Grid::Grid()
 : m_mapSize(glm::uvec2(50, 50))
-, m_blocked(new bool[m_mapSize.x * m_mapSize.y])
+, m_tileSize(2)
+, m_blocked(new bool[m_mapSize.x * m_mapSize.y * m_tileSize])
 , m_textures(new Engine::GLTexture[m_mapSize.x * m_mapSize.y]) {}
 
-std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
+bool Grid::getBlocked(glm::uvec2 position, unsigned int size) const {
+	const int radius = size / 2;
+	for (int x = -radius; x <= radius; ++x) {
+		for (int y = -radius; y <= radius; ++y) {
+			if (getBlocked(position + glm::uvec2(x, y)))
+				return true;
+		}
+	}
+	return false;
+}
+void Grid::setBlocked(glm::uvec2 position, unsigned int size, bool blocked) {
+	const int radius = size / 2;
+	for (int x = -radius; x <= radius; ++x) {
+		for (int y = -radius; y <= radius; ++y) {
+			glm::uvec2 newPosition = position + glm::uvec2(x, y);
+			if (getValidIndex(newPosition))
+				setBlocked(newPosition, blocked);
+		}
+	}
+}
+
+std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end, unsigned int size) const {
 	ClosedSet closedSet;
 	OpenSet openSet;
 
@@ -37,7 +59,7 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 			for (int y = -1; y <= 1; ++y) {
 				glm::uvec2 direction(x, y);
 				glm::uvec2 position = currentPosition + direction;
-				if (getValidIndex(position) && !getBlocked(position) && !closedSet.contains(position)){
+				if (getValidIndex(position) && !getBlocked(position, size) && !closedSet.contains(position)){
 					unsigned int gValTentative = current->getGVal() + (direction.x * direction.y) ? 14: 10;
 					if (!openSet.contains(position)) {
 						openSet.insert(new Node(position, getHVal(position, end), gValTentative, current));
@@ -54,23 +76,23 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end) const {
 }
 
 
-glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 currentPosition) const {
-	for (int radius = 1; radius < static_cast<int>(m_mapSize.x) || radius < static_cast<int>(m_mapSize.y); ++radius) {
-		for (int i = 0; i <=radius; ++i) {
+glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 currentPosition, unsigned int size) const {
+	for (unsigned int radius = 1; radius < m_mapSize.x * m_tileSize || radius < m_mapSize.y * m_tileSize; ++radius) {
+		for (unsigned int i = 0; i <=radius; ++i) {
 			glm::uvec2 position = currentPosition + glm::uvec2(-radius, i);
-			if (getValidIndex(position) && !getBlocked(position))
+			if (getValidIndex(position) && !getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(i, radius);
-			if (getValidIndex(position) && !getBlocked(position))
+			if (getValidIndex(position) && !getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(radius, -i);
-			if (getValidIndex(position) && !getBlocked(position))
+			if (getValidIndex(position) && !getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(-i, -radius);
-			if (getValidIndex(position) && !getBlocked(position))
+			if (getValidIndex(position) && !getBlocked(position, size))
 				return position;
 		}
 	}

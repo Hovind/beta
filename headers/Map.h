@@ -18,7 +18,9 @@ public:
 	glm::vec2 getWorldPosition(unsigned int index) { return getWorldPosition(m_grid.getPosition(index)); }
 
 	bool getBlocked(glm::vec2 worldPosition) { return m_grid.getBlocked(getPosition(worldPosition)); }
+	bool getBlocked(glm::vec2 worldPosition, unsigned int size) { return m_grid.getBlocked(getPosition(worldPosition), size); }
 	void setBlocked(glm::vec2 worldPosition, bool blocked) { m_grid.setBlocked(getPosition(worldPosition), blocked); }
+	void setBlocked(glm::vec2 worldPosition, unsigned int size, bool blocked) { m_grid.setBlocked(getPosition(worldPosition), size, blocked); }
 
 	void init();
 	void update(float dt);

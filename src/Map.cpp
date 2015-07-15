@@ -8,7 +8,6 @@ Map::Map(/*std::string mapFilePath*/)
 , m_playerSpawns(new glm::vec2[m_playerCapacity])*/ {
 }
 
-
 void Map::init() {
 	glm::uvec2 mapSize = m_grid.getMapSize();
 	for (unsigned int i = 0; i < mapSize.x * mapSize.y; ++i) {
@@ -36,7 +35,8 @@ void Map::init() {
 
 void Map::update(float dt) {
 	for (auto &unit : m_units) {
-		setBlocked(unit->getPosition(), false);
+		unsigned int size = unit->getGridSize();
+		setBlocked(unit->getPosition(), size, false);
 		switch (unit->getState()) {
 			case UnitState::STOP:
 				break;
@@ -50,9 +50,9 @@ void Map::update(float dt) {
 						finalDestination = getPosition(finalWorldDestination),
 						position = getPosition(worldPosition);
 					float speed = unit->getSpeed();
-					if (getBlocked(finalWorldDestination))
-						setPath(unit, getWorldPosition(m_grid.findNearestUnblockedPosition(finalDestination)));
-					if (getBlocked(currentWorldDestination))
+					if (getBlocked(finalWorldDestination, size))
+						setPath(unit, getWorldPosition(m_grid.findNearestUnblockedPosition(finalDestination, size)));
+					if (getBlocked(currentWorldDestination, size) || unit->getNeedsPathUpdate())
 						updatePath(unit);
 
 					if (position == finalDestination) {
@@ -74,7 +74,7 @@ void Map::update(float dt) {
 			case UnitState::ATTACK:
 				break;
 		}
-		setBlocked(unit->getPosition(), true);
+		setBlocked(unit->getPosition(), size, true);
 	}
 }
 
@@ -108,7 +108,7 @@ glm::vec4 Map::getBounds() {
 std::set<Unit*> Map::getUnitsWithin(glm::vec4 rect) {
 	std::set<Unit*> units;
 	for (auto &unit : m_units) {
-		glm::vec2 size =  0.5f * unit->getSize();
+		glm::vec2 size =  0.5f * unit->getDrawSize();
 		glm::vec2 position = unit->getPosition() + size;
 
 		if (rect.x - 0.0f * size.x < position.x && position.x < rect.z + 2.0f * size.x && rect.y - 0.0f * size.y < position.y && position.y < rect.w + 2.0f * size.y)
@@ -124,11 +124,11 @@ void Map::spawn(Unit *unit) {
 void Map::updatePath(Unit *unit) {
 	glm::uvec2 position = getPosition(unit);
 	glm::uvec2 destination = getPosition(unit->getFinalDestination());
-	unit->setPath(m_grid.getPath(position, destination));
+	unit->setPath(m_grid.getPath(position, destination, unit->getGridSize()));
 	unit->setCurrentDestination(getWorldPosition(unit->popPath()));
+	unit->setNeedsPathUpdate(false);
 }
 void Map::setPath(Unit *unit, glm::vec2 finalDestination) {
 	unit->setFinalDestination(finalDestination);
-	if (!getBlocked(finalDestination))
-		updatePath(unit);
+	unit->setNeedsPathUpdate(true);
 }
