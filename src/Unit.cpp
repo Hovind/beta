@@ -1,3 +1,7 @@
+/*#define GLM_FORCE_RADIANS
+
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>*/
 #include "Unit.h"
 #include "ResourceManager.h"
 
@@ -14,61 +18,74 @@ Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, f
 	m_spriteSheet.init(spriteSheetPath, spriteSheetDimensions);
 }
 
-glm::vec2 Unit::moveCurrent(float dt) {
-	glm::vec2 currentDifference = m_currentDestination - m_position;
-	m_velocity = glm::normalize(currentDifference) * m_speed;
+void Unit::move(bool final, float dt) {
+	m_velocity = glm::normalize((final ? m_finalDestination : m_currentDestination) - m_position) * m_speed;
 	m_position += m_velocity * dt;
-	return m_position;
 }
-glm::vec2 Unit::moveFinal(float dt) {
-	glm::vec2 finalDifference = m_finalDestination - m_position;
-	m_velocity = glm::normalize(finalDifference) * m_speed;
-	m_position += m_velocity * dt;
-	return m_position;
+void Unit::move(glm::vec2 destination) {
+	m_position = destination;
+	m_state = UnitState::STOP;
+
 }
 glm::uvec2 Unit::popPath() {
 	m_path.pop_back();
 	return m_path.back();
 }
 
-void Unit::draw(Engine::SpriteBatch& spriteBatch) {
+void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 	Engine::Color color;
 	glm::vec4 posAndSize = getDrawPositionAndSize();
 	unsigned int index = 54;
+	const float FRACTION = 0.4f * m_speed;
 	switch (m_state) {
 		case UnitState::STOP:
 		{
-			if (m_velocity.x > 0) {
-
-			} else if (m_velocity.x < 0) {
-
+			if (m_velocity.y > FRACTION) {
+				if (abs(m_velocity.x) > FRACTION) {
+					index = 51;
+				} else {
+					index = 50;
+				}
+			} else if (m_velocity.y < -FRACTION) {
+				if (abs(m_velocity.y) > FRACTION) {
+					index = 53;
+				} else {
+					index = 54;
+				}
 			} else {
-
+				index = 52;
 			}
 		}
 		break;
 		case UnitState::MOVE:
 		{
-			if (m_velocity.x > 0) {
-				if (m_velocity.y > 0) {
-					index =
+			if (m_velocity.y > FRACTION) {
+				if (abs(m_velocity.x) > FRACTION) {
+					index = 46;
 				} else {
-					index =
+					index = 45;
 				}
-			} else  {
-				if (m_velocity.y > 0) {
-					index =
+			} else if (m_velocity.y < - FRACTION) {
+				if (abs(m_velocity.x) > FRACTION) {
+					index = 48;
 				} else {
-					index =
+					index = 49;
 				}
+			} else {
+				index = 47;
 			}
 		}
 		break;
 
 	}
-	spriteBatch.draw(posAndSize, m_spriteSheet.getUVs(index), m_spriteSheet.getTexture().id, 0.0f, color);
+	glm::vec4 uv = m_spriteSheet.getUVs(index);
+	if (m_velocity.x < 0) {
+		uv.x += 1.0f / m_spriteSheet.getDimensions().x;
+		uv.z *= - 1.0f;
+	}
+	spriteBatch.draw(posAndSize, uv, m_spriteSheet.getTexture().id, 0.0f, color);
 }
-void Unit::drawUnitCircle(Engine::SpriteBatch& spriteBatch) {
+void Unit::drawUnitCircle(Engine::SpriteBatch& spriteBatch) const {
 	glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	Engine::Color color;
 	glm::vec4 posAndSize = getDrawPositionAndSize();

@@ -11,6 +11,7 @@ namespace Engine {
 
         glm::vec4 getUVs(unsigned int index) const { return glm::vec4(index % m_dimensions.x * 1.0f / m_dimensions.x, index / m_dimensions.x * 1.0f / m_dimensions.y, 1.0f / m_dimensions.x, 1.0f / m_dimensions.y); }
         GLTexture getTexture() const { return m_texture; }
+        glm::uvec2 getDimensions() const { return m_dimensions; }
     private:
         GLTexture m_texture;
         glm::uvec2 m_dimensions;

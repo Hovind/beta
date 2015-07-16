@@ -57,16 +57,16 @@ void Map::update(float dt) {
 
 					if (position == finalDestination) {
 						if (glm::length(finalWorldDestination - worldPosition) <= speed * dt) {
-							unit->setPosition(finalWorldDestination);
-							unit->setState(UnitState::STOP);
+							unit->move(finalWorldDestination);
 						} else {
-							unit->moveFinal(dt);
+							unit->move(true, dt);
+							unit->setDirection(getPosition(currentWorldDestination) - position);
 						}
-
 					} else {
 						if (glm::length(currentWorldDestination - worldPosition) <= speed * dt)
 							unit->setCurrentDestination(getWorldPosition(unit->popPath()));
-						unit->moveCurrent(dt);
+						unit->move(false, dt);
+						unit->setDirection(getPosition(currentWorldDestination) - position);
 					}
 					position = getPosition(unit->getPosition());
 				}

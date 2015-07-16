@@ -14,8 +14,8 @@ public:
 	Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string spriteSheetPath, glm::uvec2 spriteSheetDimensions);
 	~Unit() {}
 
-	glm::vec2 moveCurrent(float dt);
-	glm::vec2 moveFinal(float dt);
+	void move(bool final, float dt);
+	void move(glm::vec2 destination);
 	glm::uvec2 popPath();
 
 	void setNeedsPathUpdate(bool needsPathUpdate) { m_needsPathUpdate = needsPathUpdate; }
@@ -24,6 +24,7 @@ public:
 	void setPosition(glm::vec2 position) { m_position = position; }
 	void setCurrentDestination(glm::vec2 currentDestination) { m_currentDestination = currentDestination; }
 	void setFinalDestination(glm::vec2 finalDestination) { m_finalDestination = finalDestination; m_state = UnitState::MOVE; }
+	void setDirection(glm::uvec2 direction) { m_direction = direction; }
 
 	glm::vec2 getPosition() const { return m_position; }
 	glm::vec2 getCurrentDestination() const { return m_currentDestination; }
@@ -36,8 +37,8 @@ public:
 	float getSpeed() const { return m_speed; }
 	UnitState getState() const { return m_state; }
 
-	void draw(Engine::SpriteBatch &spriteBatch);
-	void drawUnitCircle(Engine::SpriteBatch& spriteBatch);
+	void draw(Engine::SpriteBatch &spriteBatch) const;
+	void drawUnitCircle(Engine::SpriteBatch& spriteBatch) const;
 
 private:
 	glm::vec2
@@ -46,6 +47,7 @@ private:
 		m_velocity,
 		m_currentDestination,
 		m_finalDestination;
+	glm::uvec2 m_direction;
 	bool m_needsPathUpdate;
 	unsigned int m_gridSize;
 	float m_speed;
