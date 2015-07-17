@@ -80,6 +80,11 @@ void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 			index -= m_spriteSheet.getDimensions().x * (static_cast<unsigned int>(m_animationTime * m_animationSpeed) % FRAMES);
 		}
 		break;
+		case UnitState::ATTACK:
+		{
+
+		}
+		break;
 
 	}
 	glm::vec4 uv = m_spriteSheet.getUVs(index);

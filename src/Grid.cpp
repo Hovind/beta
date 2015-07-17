@@ -72,7 +72,7 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end, unsigned
 			}
  		}
 	}
-	throw GameException("You can not go there!");
+	return std::vector<glm::uvec2>(1, start);
 }
 
 
@@ -96,5 +96,5 @@ glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 currentPosition, unsign
 				return position;
 		}
 	}
-	throw GameException("You can not move!");
+	return currentPosition;
 }
