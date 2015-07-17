@@ -59,7 +59,7 @@ std::vector<glm::uvec2> Grid::getPath(glm::uvec2 start, glm::uvec2 end, unsigned
 			for (int y = -1; y <= 1; ++y) {
 				glm::uvec2 direction(x, y);
 				glm::uvec2 position = currentPosition + direction;
-				if (getValidIndex(position) && !getBlocked(position, size) && !closedSet.contains(position)){
+				if (!getBlocked(position, size) && !closedSet.contains(position)){
 					unsigned int gValTentative = current->getGVal() + (direction.x * direction.y) ? 14: 10;
 					if (!openSet.contains(position)) {
 						openSet.insert(new Node(position, getHVal(position, end), gValTentative, current));
@@ -80,19 +80,19 @@ glm::uvec2 Grid::findNearestUnblockedPosition(glm::uvec2 currentPosition, unsign
 	for (unsigned int radius = 1; radius < m_mapSize.x * m_tileSize || radius < m_mapSize.y * m_tileSize; ++radius) {
 		for (unsigned int i = 0; i <=radius; ++i) {
 			glm::uvec2 position = currentPosition + glm::uvec2(-radius, i);
-			if (getValidIndex(position) && !getBlocked(position, size))
+			if (!getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(i, radius);
-			if (getValidIndex(position) && !getBlocked(position, size))
+			if (!getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(radius, -i);
-			if (getValidIndex(position) && !getBlocked(position, size))
+			if (!getBlocked(position, size))
 				return position;
 
 			position = currentPosition + glm::uvec2(-i, -radius);
-			if (getValidIndex(position) && !getBlocked(position, size))
+			if (!getBlocked(position, size))
 				return position;
 		}
 	}

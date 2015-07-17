@@ -16,7 +16,7 @@ public:
 	bool getValidIndex(glm::uvec2 position) const { return position.x < m_mapSize.x * m_tileSize && position.y < m_mapSize.y * m_tileSize; }
 	unsigned int getHVal(glm::uvec2 start, glm::uvec2 end) const { return 10*(abs(end.x - start.x) + abs(end.y - start.y)); }
 
-	bool getBlocked(glm::uvec2 position) const { return m_blocked[getIndex(position)]; }
+	bool getBlocked(glm::uvec2 position) const { return getValidIndex(position) ? m_blocked[getIndex(position)] : true; }
 	bool getBlocked(glm::uvec2 position, unsigned int size) const;
 	Engine::GLTexture &getTexture(unsigned int index) const { return m_textures[index]; }
 
