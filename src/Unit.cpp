@@ -10,6 +10,8 @@ Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, f
 , m_position(glm::vec2(x, y))
 , m_currentDestination(m_position)
 , m_finalDestination(m_position)
+, m_animationTime(0)
+, m_animationSpeed(6.0f)
 , m_needsPathUpdate(false)
 , m_gridSize(gridSize)
 , m_speed(speed)
@@ -37,6 +39,7 @@ void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 	glm::vec4 posAndSize = getDrawPositionAndSize();
 	unsigned int index = 54;
 	const float FRACTION = 0.4f * m_speed;
+	const unsigned int FRAMES = 4;
 	switch (m_state) {
 		case UnitState::STOP:
 		{
@@ -74,6 +77,7 @@ void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 			} else {
 				index = 47;
 			}
+			index -= m_spriteSheet.getDimensions().x * (static_cast<unsigned int>(m_animationTime * m_animationSpeed) % FRAMES);
 		}
 		break;
 

@@ -13,7 +13,7 @@ public:
 	unsigned int getIndex(unsigned int x, unsigned int y) const { return x * m_mapSize.x + y; }
 	unsigned int getIndex(glm::uvec2 position) const { return getIndex(position.x, position.y); }
 	glm::uvec2 getPosition(unsigned int index) const { return glm::uvec2(index % m_mapSize.x, index / m_mapSize.x); }
-	bool getValidIndex(glm::uvec2 position) const { return position.x < m_mapSize.x && position.y < m_mapSize.y; }
+	bool getValidIndex(glm::uvec2 position) const { return position.x < m_mapSize.x * m_tileSize && position.y < m_mapSize.y * m_tileSize; }
 	unsigned int getHVal(glm::uvec2 start, glm::uvec2 end) const { return 10*(abs(end.x - start.x) + abs(end.y - start.y)); }
 
 	bool getBlocked(glm::uvec2 position) const { return m_blocked[getIndex(position)]; }

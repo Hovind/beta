@@ -18,13 +18,13 @@ public:
 	void move(glm::vec2 destination);
 	glm::uvec2 popPath();
 
+	void setAnimationTime(float dt) { m_animationTime += dt; }
 	void setNeedsPathUpdate(bool needsPathUpdate) { m_needsPathUpdate = needsPathUpdate; }
 	void setPath(std::vector<glm::uvec2> path) { m_path = path; }
-	void setState(UnitState state) { m_state = state; }
+	void setState(UnitState state) { m_state = state; m_animationTime = 0; }
 	void setPosition(glm::vec2 position) { m_position = position; }
 	void setCurrentDestination(glm::vec2 currentDestination) { m_currentDestination = currentDestination; }
 	void setFinalDestination(glm::vec2 finalDestination) { m_finalDestination = finalDestination; m_state = UnitState::MOVE; }
-	void setDirection(glm::uvec2 direction) { m_direction = direction; }
 
 	glm::vec2 getPosition() const { return m_position; }
 	glm::vec2 getCurrentDestination() const { return m_currentDestination; }
@@ -47,7 +47,9 @@ private:
 		m_velocity,
 		m_currentDestination,
 		m_finalDestination;
-	glm::uvec2 m_direction;
+	float
+		m_animationTime,
+		m_animationSpeed;
 	bool m_needsPathUpdate;
 	unsigned int m_gridSize;
 	float m_speed;

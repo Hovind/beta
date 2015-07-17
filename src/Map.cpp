@@ -56,17 +56,14 @@ void Map::update(float dt) {
 						updatePath(unit);
 
 					if (position == finalDestination) {
-						if (glm::length(finalWorldDestination - worldPosition) <= speed * dt) {
+						if (glm::length(finalWorldDestination - worldPosition) <= speed * dt)
 							unit->move(finalWorldDestination);
-						} else {
+						else
 							unit->move(true, dt);
-							unit->setDirection(getPosition(currentWorldDestination) - position);
-						}
 					} else {
 						if (glm::length(currentWorldDestination - worldPosition) <= speed * dt)
 							unit->setCurrentDestination(getWorldPosition(unit->popPath()));
 						unit->move(false, dt);
-						unit->setDirection(getPosition(currentWorldDestination) - position);
 					}
 					position = getPosition(unit->getPosition());
 				}
@@ -74,6 +71,7 @@ void Map::update(float dt) {
 			case UnitState::ATTACK:
 				break;
 		}
+		unit->setAnimationTime(dt);
 		setBlocked(unit->getPosition(), size, true);
 	}
 }
@@ -86,9 +84,9 @@ void Map::drawMap(Engine::SpriteBatch &spriteBatch) {
 		glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 
 		Engine::GLTexture texture;
-		if (getBlocked(position))
+		/*if (getBlocked(position))
 			texture = Engine::ResourceManager::getTexture("textures/tiles/redgrass.png");
-		else
+		else*/
 			texture = m_grid.getTexture(i);
 
 		Engine::Color color;
