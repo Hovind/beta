@@ -50,6 +50,7 @@ void Map::update(float dt) {
 						finalDestination = getPosition(finalWorldDestination),
 						position = getPosition(worldPosition);
 					float speed = unit->getSpeed();
+
 					if (getBlocked(finalWorldDestination, size))
 						setPath(unit, getWorldPosition(m_grid.findNearestUnblockedPosition(finalDestination, size)));
 					if (getBlocked(currentWorldDestination, size) || unit->getNeedsPathUpdate())
@@ -65,7 +66,6 @@ void Map::update(float dt) {
 							unit->setCurrentDestination(getWorldPosition(unit->popPath()));
 						unit->move(false, dt);
 					}
-					position = getPosition(unit->getPosition());
 				}
 				break;
 			case UnitState::ATTACK:
@@ -83,15 +83,9 @@ void Map::drawMap(Engine::SpriteBatch &spriteBatch) {
 		glm::vec4 posAndSize = glm::vec4(position - 0.5f * glm::vec2(m_tileSize), m_tileSize, m_tileSize);
 		glm::vec4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 
-		Engine::GLTexture texture;
-		/*if (getBlocked(position))
-			texture = Engine::ResourceManager::getTexture("textures/tiles/redgrass.png");
-		else*/
-			texture = m_grid.getTexture(i);
-
 		Engine::Color color;
 
-		spriteBatch.draw(posAndSize, uv, texture.id, 0.0f, color);
+		spriteBatch.draw(posAndSize, uv, m_grid.getTexture(i).id, 0.0f, color);
 	}
 }
 void Map::draw(Engine::SpriteBatch &spriteBatch) {
@@ -116,7 +110,7 @@ std::set<Unit*> Map::getUnitsWithin(glm::vec4 rect) {
 }
 void Map::spawn(Unit *unit) {
 	m_units.insert(unit);
-	m_grid.setBlocked(getPosition(unit->getPosition()), true);
+	setBlocked(unit->getPosition(), unit->getGridSize(), true);
 }
 
 void Map::updatePath(Unit *unit) {
