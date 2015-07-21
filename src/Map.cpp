@@ -90,7 +90,7 @@ void Map::drawMap(Engine::SpriteBatch &spriteBatch) {
 }
 void Map::draw(Engine::SpriteBatch &spriteBatch) {
 	drawMap(spriteBatch);
-	for (auto it = m_units.begin(); it != m_units.end(); ++it)
+	for (auto &it : m_units)
 		(*it)->draw(spriteBatch);
 }
 

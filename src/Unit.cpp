@@ -63,7 +63,7 @@ void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 		case UnitState::MOVE:
 		{
 			if (m_velocity.y > FRACTION) {
-				if (abs(m_velocity.x) > FRACTION) {
+				if (labs(m_velocity.x) > FRACTION) {
 					index = 46;
 				} else {
 					index = 45;
