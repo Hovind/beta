@@ -6,18 +6,13 @@
 #include "ResourceManager.h"
 
 Unit::Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string spriteSheetPath, glm::uvec2 spriteSheetDimensions)
-: m_drawSize(glm::vec2(width, height))
-, m_position(glm::vec2(x, y))
-, m_currentDestination(m_position)
-, m_finalDestination(m_position)
+: Object(x, y, width, height, gridSize, true, spriteSheetPath, spriteSheetDimensions)
 , m_animationTime(0)
 , m_animationSpeed(6.0f)
 , m_needsPathUpdate(false)
-, m_gridSize(gridSize)
 , m_speed(speed)
 , m_state(UnitState::STOP) {
 	m_circleTexture = Engine::ResourceManager::getTexture("textures/misc/circle.png");
-	m_spriteSheet.init(spriteSheetPath, spriteSheetDimensions);
 }
 
 void Unit::move(bool final, float dt) {
@@ -27,7 +22,6 @@ void Unit::move(bool final, float dt) {
 void Unit::move(glm::vec2 destination) {
 	m_position = destination;
 	m_state = UnitState::STOP;
-
 }
 glm::uvec2 Unit::popPath() {
 	m_path.pop_back();
@@ -63,7 +57,7 @@ void Unit::draw(Engine::SpriteBatch& spriteBatch) const {
 		case UnitState::MOVE:
 		{
 			if (m_velocity.y > FRACTION) {
-				if (labs(m_velocity.x) > FRACTION) {
+				if (abs(m_velocity.x) > FRACTION) {
 					index = 46;
 				} else {
 					index = 45;

@@ -36,7 +36,8 @@ void Map::init() {
 void Map::update(float dt) {
 	for (auto &unit : m_units) {
 		unsigned int size = unit->getGridSize();
-		setBlocked(unit->getPosition(), size, false);
+		glm::vec2 oldPosition = unit->getPosition();
+		setBlocked(oldPosition, size, false);
 		switch (unit->getState()) {
 			case UnitState::STOP:
 				break;
@@ -72,7 +73,11 @@ void Map::update(float dt) {
 				break;
 		}
 		unit->setAnimationTime(dt);
-		setBlocked(unit->getPosition(), size, true);
+		glm::vec2 newPosition = unit->getPosition();
+		setBlocked(newPosition, size, true);
+		if (getPosition(oldPosition) != getPosition(newPosition))
+			setAllNeedsPathUpdate(unit);
+
 	}
 }
 
@@ -90,8 +95,8 @@ void Map::drawMap(Engine::SpriteBatch &spriteBatch) {
 }
 void Map::draw(Engine::SpriteBatch &spriteBatch) {
 	drawMap(spriteBatch);
-	for (auto &it : m_units)
-		(*it)->draw(spriteBatch);
+	for (auto &unit : m_units)
+		unit->draw(spriteBatch);
 }
 
 glm::vec4 Map::getBounds() {
@@ -123,4 +128,11 @@ void Map::updatePath(Unit *unit) {
 void Map::setPath(Unit *unit, glm::vec2 finalDestination) {
 	unit->setFinalDestination(finalDestination);
 	unit->setNeedsPathUpdate(true);
+}
+
+void Map::setAllNeedsPathUpdate(Unit *currentUnit) {
+	for (auto &unit : m_units)
+		if (unit != currentUnit)
+			unit->setNeedsPathUpdate(true);
+
 }

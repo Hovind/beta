@@ -34,6 +34,7 @@ public:
 
 	void updatePath(Unit *unit);
 	void setPath(Unit *unit, glm::vec2 finalDestination);
+	void setAllNeedsPathUpdate(Unit *currentUnit);
 private:
 	Grid m_grid;
 	float m_tileSize;
