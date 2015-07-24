@@ -36,22 +36,21 @@ void Map::init() {
 void Map::update(float dt) {
 	for (auto &unit : m_units) {
 		unsigned int size = unit->getGridSize();
-		glm::vec2 oldPosition = unit->getPosition();
-		setBlocked(oldPosition, size, false);
+		glm::vec2
+			currentWorldDestination = unit->getCurrentDestination(),
+			finalWorldDestination = unit->getFinalDestination(),
+			worldPosition = unit->getPosition();
+		glm::uvec2
+			finalDestination = getPosition(finalWorldDestination),
+			position = getPosition(worldPosition);
+		float speed = unit->getSpeed();
+
+		setBlocked(worldPosition, size, false);
 		switch (unit->getState()) {
 			case UnitState::STOP:
 				break;
 			case UnitState::MOVE:
 				{
-					glm::vec2
-						currentWorldDestination = unit->getCurrentDestination(),
-						finalWorldDestination = unit->getFinalDestination(),
-						worldPosition = unit->getPosition();
-					glm::uvec2
-						finalDestination = getPosition(finalWorldDestination),
-						position = getPosition(worldPosition);
-					float speed = unit->getSpeed();
-
 					if (getBlocked(finalWorldDestination, size))
 						setPath(unit, getWorldPosition(m_grid.findNearestUnblockedPosition(finalDestination, size)));
 					if (getBlocked(currentWorldDestination, size) || unit->getNeedsPathUpdate())
@@ -72,12 +71,14 @@ void Map::update(float dt) {
 			case UnitState::ATTACK:
 				break;
 		}
-		unit->setAnimationTime(dt);
-		glm::vec2 newPosition = unit->getPosition();
-		setBlocked(newPosition, size, true);
-		if (getPosition(oldPosition) != getPosition(newPosition))
-			setAllNeedsPathUpdate(unit);
+		worldPosition = unit->getPosition();
+		glm::uvec2 newPosition = getPosition(worldPosition);
+		setBlocked(worldPosition, size, true);
 
+		if (newPosition != position)
+			setAllNeedsPathUpdate(unit);
+			
+		unit->setAnimationTime(dt);
 	}
 }
 

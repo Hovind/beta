@@ -5,7 +5,6 @@
 enum class UnitState {STOP, MOVE, ATTACK};
 
 class Unit : public Object {
-friend class Map;
 public:
 	Unit(float x, float y, float width, float height, unsigned int gridSize, float speed, std::string spriteSheetPath, glm::uvec2 spriteSheetDimensions);
 	~Unit() {}
