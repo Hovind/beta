@@ -1,3 +1,3 @@
-# beta
+# Beta
 
-Just another RTS. Probably won't work for you without alterations to makefile.
+Just another RTS. Probably won't work for you without alterations to Makefile.
